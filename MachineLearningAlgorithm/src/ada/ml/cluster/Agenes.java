@@ -32,8 +32,6 @@ public class Agenes {
 	private Point[] p=null;
 	private int finalClusterNum=20;
 	private int currentClusterNum=20;
-	//记录了某个节点所在的cluster被合并而成的所有历史记录，历史记录之间用“，”隔开。每个历史记录Cluster中
-	//又包含了两个被合并的cluster,这两个cluster用 “｜” 隔开
 	private Map<Integer,Set<Integer>> pointIdTopointSet=new ConcurrentHashMap<Integer,Set<Integer>>();
 	public Agenes(Point[] p,int fcnum){
 		this.p=p;
@@ -93,7 +91,6 @@ public class Agenes {
 			if(clusterFirst.contains(pa.getSecond())){
 				continue;
 			}
-			//每个历史记录cluster用 "#" 隔开
 			mergeCluster(clusterFirst,clusterSecond);
 			this.currentClusterNum--;
 			if(this.currentClusterNum==this.finalClusterNum){
@@ -119,7 +116,6 @@ public class Agenes {
 		}
 		return ret;
 	}
-	//两个新合并的cluster用 “｜” 隔开,每个cluster中原有的元素用 “,”隔开
 	private void mergeCluster(Set<Integer> f, Set<Integer> secnd){
 		for(int id :f){
 			Set<Integer> s=this.pointIdTopointSet.get(id);
@@ -135,15 +131,11 @@ public class Agenes {
 		int k=10;
 		Point.setDistanceCalculator(new  DistanceCalculator());
 		Point[] pa=new Point[num];
-/*		pa[0]=new Point(0,new double[]{0,1});
-		pa[1]=new Point(0,new double[]{1,0});
-		pa[2]=new Point(0,new double[]{7,2});
-		pa[3]=new Point(0,new double[]{2,7});*/
+
 		for(int i=0;i<num;i++){
 			Random r=new Random(); 
 			Random l=new Random(); 
 			Point p=new Point(i,new double[]{r.nextInt(100),l.nextInt(300)});
-			//System.out.println(p.toString());
 			 pa[i]=p;
 		}
 		Agenes a=new Agenes(pa,k);
