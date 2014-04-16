@@ -6,10 +6,10 @@ package ada.ml.common;
 public class DistanceCalculator {
 	//by default, calculate cos<p1,p2>
 	public double calculate(Point p1, Point p2){
-		double[] v=p1.getTfIdfVec();
-		double innerProduct=1d;
+		double[] v=p1.getVector();
+		double innerProduct=0d;
 		for(int i=0;i<v.length;i++){
-			innerProduct=v[i]*p2.getTfIdfVec()[i];
+			innerProduct+=v[i]*p2.getVector()[i];
 		}
 		return innerProduct/(p1.getVecLen()*p2.getVecLen());
 	}

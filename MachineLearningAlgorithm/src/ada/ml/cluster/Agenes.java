@@ -1,14 +1,19 @@
 package ada.ml.cluster;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
+import ada.ml.common.DistanceCalculator;
 import ada.ml.common.Point;
 
 /**
@@ -29,7 +34,7 @@ public class Agenes {
 	private int currentClusterNum=20;
 	//记录了某个节点所在的cluster被合并而成的所有历史记录，历史记录之间用“，”隔开。每个历史记录Cluster中
 	//又包含了两个被合并的cluster,这两个cluster用 “｜” 隔开
-	private Map<Integer,String> pointIdToClusterLevel=new HashMap<Integer,String>();
+	private Map<Integer,Set<Integer>> pointIdTopointSet=new ConcurrentHashMap<Integer,Set<Integer>>();
 	public Agenes(Point[] p,int fcnum){
 		this.p=p;
 		this.finalClusterNum=fcnum;
@@ -48,9 +53,9 @@ public class Agenes {
 		public int compareTo(PointPair o) {
 			// TODO Auto-generated method stub
 			if(this.distance>o.distance){
-				return 1;
-			}else if(this.distance<o.distance){
 				return -1;
+			}else if(this.distance<o.distance){
+				return 1;
 			}else{
 				return 0;
 			}
@@ -62,7 +67,7 @@ public class Agenes {
 			return second;
 		}
 	}
-	private void getPointPairAndSort(){
+	private List<PointPair> getPointPairAndSort(){
 		List<PointPair> l=new ArrayList<PointPair>();
 		for(int i=0;i<p.length;i++){
 			for(int j=i+1;j<p.length;j++){
@@ -71,48 +76,84 @@ public class Agenes {
 			}
 		}
 		Collections.sort(l);
+		return l;
 	}
-	public void doCluster(List<PointPair> l){
-		getPointPairAndSort();
+	public void doCluster(){
+		List<PointPair> l=getPointPairAndSort();
+		
+		for(int i=0;i<p.length;i++){
+			Set<Integer> s=new ConcurrentSkipListSet<Integer>();
+			this.pointIdTopointSet.put(i, s);
+			s.add(i);
+		}
 		for(PointPair pa : l){
-			String clusterFirst=this.pointIdToClusterLevel.get(pa.getFirst());
-			String clusterSecond=this.pointIdToClusterLevel.get(pa.getSecond());
-			if(clusterFirst==null){
-				clusterFirst=String.valueOf(pa.getFirst());
-				this.pointIdToClusterLevel.put(pa.getFirst(), clusterFirst);
-			}
-			if(clusterSecond==null){
-				clusterSecond=String.valueOf(pa.getSecond());
-				this.pointIdToClusterLevel.put(pa.getSecond(), clusterSecond);
-			}
+			Set<Integer> clusterFirst=this.pointIdTopointSet.get(pa.getFirst());
+			Set<Integer> clusterSecond=this.pointIdTopointSet.get(pa.getSecond());
 			//这两个点已经在一个cluster中 则移动到下一个pair
-			if(clusterFirst.contains(String.valueOf(pa.getSecond()))){
+			if(clusterFirst.contains(pa.getSecond())){
 				continue;
 			}
 			//每个历史记录cluster用 "#" 隔开
-			String s=mergeCluster(clusterFirst.split("#"),clusterSecond.split("#") );
-			this.pointIdToClusterLevel.put(pa.getFirst(), clusterFirst.concat("#").concat(s));
-			this.pointIdToClusterLevel.put(pa.getSecond(), clusterSecond.concat("#").concat(s));
+			mergeCluster(clusterFirst,clusterSecond);
 			this.currentClusterNum--;
 			if(this.currentClusterNum==this.finalClusterNum){
 				break;
 			}
 		}
 	}
-	public Set<String> getResult(){
-		Set<String> ret=new HashSet<String>();
-		Set<Entry<Integer,String>> ens=this.pointIdToClusterLevel.entrySet();
-		for(Entry<Integer,String> en:ens){
-			String[] c=en.getValue().split(",");
-			ret.add(c[c.length-1].replace("|", ""));
+	public List<Point[]> getResult(){
+		List<Point[]> ret=new ArrayList<Point[]>();
+		Collection<Set<Integer>> c=this.pointIdTopointSet.values();
+		Set<Set<Integer>> s=new HashSet<Set<Integer>>();
+		for(Set<Integer> st:c){
+			s.add(st);
+		}
+		for(Set<Integer> each:s){
+			Point[] pa=new Point[each.size()];
+			int index=0;
+			for(Integer pid:each){
+				pa[index]=p[pid];
+				index++;
+			}
+			ret.add(pa);
 		}
 		return ret;
 	}
 	//两个新合并的cluster用 “｜” 隔开,每个cluster中原有的元素用 “,”隔开
-	private String mergeCluster(String[] f, String[] secnd){
-		String lastF=f[f.length-1].replace("|", ",");
-		String lasdS=secnd[secnd.length-1].replace("|", ",");
-		String newCluster=lastF.concat("|").concat(lasdS);
-		return newCluster;
+	private void mergeCluster(Set<Integer> f, Set<Integer> secnd){
+		for(int id :f){
+			Set<Integer> s=this.pointIdTopointSet.get(id);
+			s.addAll(secnd);
+		}
+		for(int id :secnd){
+			Set<Integer> s=this.pointIdTopointSet.get(id);
+			s.addAll(f);
+		}
+	}
+	public static void main(String[] args){
+		int num=50;
+		int k=10;
+		Point.setDistanceCalculator(new  DistanceCalculator());
+		Point[] pa=new Point[num];
+/*		pa[0]=new Point(0,new double[]{0,1});
+		pa[1]=new Point(0,new double[]{1,0});
+		pa[2]=new Point(0,new double[]{7,2});
+		pa[3]=new Point(0,new double[]{2,7});*/
+		for(int i=0;i<num;i++){
+			Random r=new Random(); 
+			Random l=new Random(); 
+			Point p=new Point(i,new double[]{r.nextInt(100),l.nextInt(300)});
+			//System.out.println(p.toString());
+			 pa[i]=p;
+		}
+		Agenes a=new Agenes(pa,k);
+		a.doCluster();
+		List<Point[]> ret=a.getResult();
+		for(Point[] rep:ret){
+			for(Point p:rep){
+				System.out.print(","+p.toString());
+			}
+			System.out.println("\n");
+		}
 	}
 }
