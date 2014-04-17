@@ -32,7 +32,7 @@ public class KMeans {
 	private double precision;
 	private int maxIteration;
 	private Map<Point,List<Point>> centerToMember=new HashMap<Point,List<Point>>();
-	public KMeans(Point[] p,int k,double moveDistance,int maxiteration){
+	public KMeans(Point[] p,int k,double moveDistance,int maxIteration){
 		this.p=p;
 		this.k=k;
 		this.precision=moveDistance;
