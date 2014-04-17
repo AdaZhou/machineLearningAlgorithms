@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import ada.ml.common.CosDistanceCalculator;
+import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
 /**
@@ -131,7 +132,7 @@ public class Agenes {
 	public static void main(String[] args){
 		int num=50;
 		int k=10;
-		Point.setDistanceCalculator(new CosDistanceCalculator());
+		Point.setDistanceCalculator(new EuclideanDistanceCalculator());
 		Point[] pa=new Point[num];
 /*		pa[0]=new Point(0,new double[]{0,1});
 		pa[1]=new Point(0,new double[]{1,0});

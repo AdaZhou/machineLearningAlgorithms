@@ -10,7 +10,7 @@ import java.util.Set;
  * 2014-04-15 11:49:30 create
  * **/
 public class TfIdfGenerator {
-	private double allDocCount;
+	private int allDocCount=0;
 	private Map<String,Map<String,Double>> termToDocIdToTf=new HashMap<String,Map<String,Double>>();
 	private Set<String> termSet=new HashSet<String>();
 	private Map<String,Integer> termToIndex=new HashMap<String,Integer>();
@@ -22,6 +22,7 @@ public class TfIdfGenerator {
 			Map<String,Double> docIds=termToDocIdToTf.get(term);
 			if(docIds==null){
 				docIds=new HashMap<String,Double>();
+				termToDocIdToTf.put(term, docIds );
 			}
 			double tf=en.getValue()/wordNumber;
 			docIds.put(docId, tf);
@@ -37,7 +38,7 @@ public class TfIdfGenerator {
 		
 	}
 	public double[] getTfIdf(String docId,Set<String> termSet){
-		double[] tfidf=new double[termSet.size()];
+		double[] tfidf=new double[termToDocIdToTf.size()];
 		for(String term:termSet){
 			int index=termToIndex.get(term);
 			double docHasTerm=termToDocIdToTf.get(term).size();

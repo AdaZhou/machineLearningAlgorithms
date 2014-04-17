@@ -5,6 +5,7 @@ public class Point {
 	private double[] vector=null;
 	private double vecLen=0d;
 	private static DistanceCalculator ds;
+	private String id;
 	public static void setDistanceCalculator(DistanceCalculator ds){
 		Point.ds=ds;
 	}
@@ -16,10 +17,21 @@ public class Point {
 		vecLen=Math.sqrt(vecLen);
 		this.dimension=vector.length;
 	}
+	public Point(double[] vector,String id){
+		this.vector = vector;
+		this.id=id;
+		for(double v : vector){
+			vecLen+=v*v;
+		}
+		vecLen=Math.sqrt(vecLen);
+		this.dimension=vector.length;
+	}
 	public int getDimension(){
 		return this.dimension;
 	}
-	
+	public String getId(){
+		return id;
+	}
 	
 	public double[] getVector() {
 		return vector;
@@ -40,5 +52,22 @@ public class Point {
 		}
 		s=s.concat(" )");
 		return s;
+	}
+	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof Point)){
+			return false;
+		}
+		Point p=(Point)obj;
+		if(p==obj){
+			return true;
+		}
+		double[] vec=p.vector;
+		for(int i=0;i<vec.length;i++){
+			if(vec[i]!=this.vector[i]){
+				return false;
+			}
+		}
+		return true;
 	}
 }
