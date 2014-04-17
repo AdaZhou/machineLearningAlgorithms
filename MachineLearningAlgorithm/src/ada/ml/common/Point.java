@@ -30,7 +30,7 @@ public class Point {
 		return ds;
 	}
 	public double calculateDistance(Point p){
-		return ds.calculate(this, p);
+		return ds.getDistance(this, p);
 	}
 	public String toString(){
 		String s="( ";

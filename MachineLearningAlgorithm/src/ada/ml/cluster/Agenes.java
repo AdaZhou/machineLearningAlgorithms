@@ -11,7 +11,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import ada.ml.common.CosDistanceCalculator;
 import ada.ml.common.DistanceCalculator;
+import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
 /**
@@ -46,12 +48,15 @@ public class Agenes {
 			this.distance=distance;
 		}
 		@Override
+		/**
+		 * sort asc
+		 * **/
 		public int compareTo(PointPair o) {
 			// TODO Auto-generated method stub
 			if(this.distance>o.distance){
-				return -1;
-			}else if(this.distance<o.distance){
 				return 1;
+			}else if(this.distance<o.distance){
+				return -1;
 			}else{
 				return 0;
 			}
@@ -127,13 +132,16 @@ public class Agenes {
 	public static void main(String[] args){
 		int num=50;
 		int k=10;
-		Point.setDistanceCalculator(new  DistanceCalculator());
+		Point.setDistanceCalculator(new CosDistanceCalculator());
 		Point[] pa=new Point[num];
-
+/*		pa[0]=new Point(0,new double[]{0,1});
+		pa[1]=new Point(0,new double[]{1,0});
+		pa[2]=new Point(0,new double[]{0.8,0.2});
+		pa[3]=new Point(0,new double[]{0.2,0.8});*/
 		for(int i=0;i<num;i++){
 			Random r=new Random(); 
 			Random l=new Random(); 
-			Point p=new Point(i,new double[]{r.nextInt(100),l.nextInt(300)});
+			Point p=new Point(i,new double[]{r.nextInt(200),l.nextInt(300)});
 			 pa[i]=p;
 		}
 		Agenes a=new Agenes(pa,k);
