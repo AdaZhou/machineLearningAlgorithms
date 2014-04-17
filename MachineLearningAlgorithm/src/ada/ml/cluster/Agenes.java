@@ -12,8 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import ada.ml.common.CosDistanceCalculator;
-import ada.ml.common.DistanceCalculator;
-import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
 /**
@@ -79,7 +77,7 @@ public class Agenes {
 		Collections.sort(l);
 		return l;
 	}
-	public void doCluster(){
+	public List<Point[]> doCluster(){
 		List<PointPair> l=getPointPairAndSort();
 		
 		for(int i=0;i<p.length;i++){
@@ -100,8 +98,9 @@ public class Agenes {
 				break;
 			}
 		}
+		return getResult();
 	}
-	public List<Point[]> getResult(){
+	private List<Point[]> getResult(){
 		List<Point[]> ret=new ArrayList<Point[]>();
 		Collection<Set<Integer>> c=this.pointIdTopointSet.values();
 		Set<Set<Integer>> s=new HashSet<Set<Integer>>();
@@ -138,15 +137,13 @@ public class Agenes {
 		pa[1]=new Point(0,new double[]{1,0});
 		pa[2]=new Point(0,new double[]{0.8,0.2});
 		pa[3]=new Point(0,new double[]{0.2,0.8});*/
+		Random r=new Random();
 		for(int i=0;i<num;i++){
-			Random r=new Random(); 
-			Random l=new Random(); 
-			Point p=new Point(i,new double[]{r.nextInt(200),l.nextInt(300)});
+			Point p=new Point(new double[]{r.nextInt(200),r.nextInt(300)});
 			 pa[i]=p;
 		}
 		Agenes a=new Agenes(pa,k);
-		a.doCluster();
-		List<Point[]> ret=a.getResult();
+		List<Point[]> ret=a.doCluster();
 		for(Point[] rep:ret){
 			for(Point p:rep){
 				System.out.print(","+p.toString());

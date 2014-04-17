@@ -1,24 +1,25 @@
 package ada.ml.common;
 
 public class Point {
+	private int dimension;
 	private double[] vector=null;
 	private double vecLen=0d;
-	private int id;
 	private static DistanceCalculator ds;
 	public static void setDistanceCalculator(DistanceCalculator ds){
 		Point.ds=ds;
 	}
-	public Point(int id,double[] vector){
+	public Point(double[] vector){
 		this.vector = vector;
-		this.id=id;
 		for(double v : vector){
 			vecLen+=v*v;
 		}
 		vecLen=Math.sqrt(vecLen);
+		this.dimension=vector.length;
 	}
-	public int getId(){
-		return this.id;
+	public int getDimension(){
+		return this.dimension;
 	}
+	
 	
 	public double[] getVector() {
 		return vector;

@@ -9,7 +9,7 @@ import java.util.Set;
  * @author zhouxc
  * 2014-04-15 11:49:30 create
  * **/
-public class TfIdfManager {
+public class TfIdfGenerator {
 	private double allDocCount;
 	private Map<String,Map<String,Double>> termToDocIdToTf=new HashMap<String,Map<String,Double>>();
 	private Set<String> termSet=new HashSet<String>();
