@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import ada.ml.common.CosDistanceCalculator;
 import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
@@ -47,9 +46,6 @@ public class Agenes {
 			this.distance=distance;
 		}
 		@Override
-		/**
-		 * sort asc
-		 * **/
 		public int compareTo(PointPair o) {
 			// TODO Auto-generated method stub
 			if(this.distance>o.distance){
