@@ -3,6 +3,7 @@ package ada.ml.cluster;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,8 @@ public class Agenes {
 	private Point[] p=null;
 	private int finalClusterNum=20;
 	private int currentClusterNum=20;
-	private Map<Integer,Set<Integer>> pointIdTopointSet=new ConcurrentHashMap<Integer,Set<Integer>>();
+	private Map<Integer,Set<Integer>> pointIdTopointSet=new HashMap<Integer,Set<Integer>>();
+	
 	public Agenes(Point[] p,int fcnum){
 		this.p=p;
 		this.finalClusterNum=fcnum;
@@ -79,6 +81,7 @@ public class Agenes {
 		
 		for(int i=0;i<p.length;i++){
 			Set<Integer> s=new ConcurrentSkipListSet<Integer>();
+			//Set<Integer> s=new HashSet<Integer>();
 			this.pointIdTopointSet.put(i, s);
 			s.add(i);
 		}
