@@ -27,13 +27,13 @@ import ada.ml.common.Point;
    (3)组平均：定义簇的邻近度为取自两个不同簇的所有点对邻近度的平均值。
    目前本算法实现的是单链
  * **/
-public class Agenes {
+public class Agnes {
 	private Point[] p=null;
 	private int finalClusterNum=20;
 	private int currentClusterNum=20;
 	private Map<Integer,Set<Integer>> pointIdTopointSet=new HashMap<Integer,Set<Integer>>();
 	
-	public Agenes(Point[] p,int fcnum){
+	public Agnes(Point[] p,int fcnum){
 		this.p=p;
 		this.finalClusterNum=fcnum;
 		this.currentClusterNum=p.length;
@@ -142,7 +142,7 @@ public class Agenes {
 			Point p=new Point(new double[]{r.nextInt(200),r.nextInt(300)});
 			 pa[i]=p;
 		}
-		Agenes a=new Agenes(pa,k);
+		Agnes a=new Agnes(pa,k);
 		List<Point[]> ret=a.doCluster();
 		for(Point[] rep:ret){
 			for(Point p:rep){
