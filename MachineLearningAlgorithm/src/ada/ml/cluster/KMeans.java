@@ -10,10 +10,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
 /**
@@ -44,7 +46,7 @@ public class KMeans {
 		//initial k center
 		while(count<k){
 			int pi=r.nextInt(k);
-			if(!centerToMember.containsKey(pi)){
+			if(!centerToMember.containsKey(p[pi])){
 				centerToMember.put(p[pi], new ArrayList<Point>());
 				count++;
 			}
@@ -54,7 +56,9 @@ public class KMeans {
 		while(!converge&&iteration<maxIteration+1){
 			iteration++;
 			reloacate();
-			converge=calculateNewCenter();
+			if(iteration<maxIteration+1){
+				converge=calculateNewCenter();
+			}
 		}
 		return this.centerToMember;
 	}
@@ -69,14 +73,18 @@ public class KMeans {
 			double distance=center.calculateDistance(centerNew);
 			move[index]=distance;
 			index++;
-			nc.put(center, new ArrayList<Point>());
+			nc.put(centerNew, new ArrayList<Point>());
 		}
 		boolean converge=true;
+		System.out.print("center move: ");
 		for(double movedis: move){
 			if(movedis>this.precision){
 				converge=false;
 			}
+			System.out.print(movedis);
+			System.out.print("===");
 		}
+		System.out.println(" ");
 		if(!converge){
 			this.centerToMember=nc;
 		}
@@ -107,20 +115,44 @@ public class KMeans {
 		double[][] ar=new double[dimension][1];
 		for(Point pt:pl){
 			for(int i=0;i<pt.getVector().length;i++){
-				ar[i][1]+=pt.getVector()[i];
+				ar[i][0]+=pt.getVector()[i];
 			}
 		}
 		double[] vec=new double[dimension];
 		for(int i=0;i<dimension;i++){
-			vec[i]=ar[i][1]/pl.size();
+			vec[i]=ar[i][0]/pl.size();
 		}
 		Point cen=new Point(vec);
 		return cen;
 	}
 	public static void main(String[] args){
+		int num=50;
+		int k=10;
+		double d=10E-2;
+		int maxIteration=1000000;
+		Point.setDistanceCalculator(new EuclideanDistanceCalculator());
+		Point[] pa=new Point[num];
+/*		pa[0]=new Point(0,new double[]{0,1});
+		pa[1]=new Point(0,new double[]{1,0});
+		pa[2]=new Point(0,new double[]{0.8,0.2});
+		pa[3]=new Point(0,new double[]{0.2,0.8});*/
 		Random r=new Random();
-		for(int i=0;i<10;i++){
-			System.out.println(r.nextInt(300));
+		for(int i=0;i<num;i++){
+			Point p=new Point(new double[]{r.nextInt(200),r.nextInt(300)});
+			 pa[i]=p;
+		}
+		KMeans a=new KMeans(pa,k,d,maxIteration);
+		Map<Point,List<Point>> ret=a.doCluster();
+		Set<Entry<Point,List<Point>>> ensets=ret.entrySet();
+		for(Entry<Point,List<Point>> en : ensets){
+			System.out.print("center point: "+en.getKey().toString());
+			System.out.print("=========== member point: ");
+			List<Point> lp=en.getValue();
+			StringBuffer sb=new StringBuffer();
+			for(Point p:lp){
+				sb.append(p.toString()).append("==");
+			}
+			System.out.println(sb.toString());
 		}
 	}
 }
