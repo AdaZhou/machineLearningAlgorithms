@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import ada.ml.common.EuclideanDistanceCalculator;
@@ -26,17 +26,29 @@ import ada.ml.common.Point;
 
    (3)组平均：定义簇的邻近度为取自两个不同簇的所有点对邻近度的平均值。
    目前本算法实现的是单链
+   算法描述：算法时间复杂度为 n*n
+   1. 将Point[] p两两配对并计算两点间的距离，生成Pair对象, n*n
+   2. 将Pair按照从小到大的顺序排序。n*logn
+   3.repeat:
+   	    遍历Pair 如果Pair中的两个点属于不同类别，则合并这两个点所在的类。
+   	 until: 类别数=finalClusterNum 或者 类间距>diff
  * **/
 public class Agnes {
 	private Point[] p=null;
 	private int finalClusterNum=20;
 	private int currentClusterNum=20;
+	double diffLine=10;
 	private Map<Integer,Set<Integer>> pointIdTopointSet=new HashMap<Integer,Set<Integer>>();
-	
-	public Agnes(Point[] p,int fcnum){
+	/**
+	 * @param fcnum 聚集成的类数
+	 * @param diff 类间的最小距离
+	 * 停止条件为满足 聚类后的类别数量达到fcnum或者是类间最小距离为diff以上。
+	 * **/
+	public Agnes(Point[] p,int fcnum,double diff){
 		this.p=p;
 		this.finalClusterNum=fcnum;
 		this.currentClusterNum=p.length;
+		this.diffLine=diff;
 	}
 	private static class PointPair implements Comparable<PointPair>{
 		private int first;
@@ -94,7 +106,9 @@ public class Agnes {
 			}
 			mergeCluster(clusterFirst,clusterSecond);
 			this.currentClusterNum--;
-			if(this.currentClusterNum==this.finalClusterNum){
+			double dis=p[pa.getFirst()].calculateDistance(p[pa.getSecond()]);
+			//System.out.println(dis);
+			if(this.currentClusterNum==this.finalClusterNum||dis>this.diffLine){
 				break;
 			}
 		}
@@ -142,7 +156,7 @@ public class Agnes {
 			Point p=new Point(new double[]{r.nextInt(200),r.nextInt(300)});
 			 pa[i]=p;
 		}
-		Agnes a=new Agnes(pa,k);
+		Agnes a=new Agnes(pa,k,1);
 		List<Point[]> ret=a.doCluster();
 		for(Point[] rep:ret){
 			for(Point p:rep){

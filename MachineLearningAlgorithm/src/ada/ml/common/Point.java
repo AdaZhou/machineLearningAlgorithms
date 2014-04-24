@@ -6,6 +6,14 @@ public class Point {
 	private double vecLen=0d;
 	private static DistanceCalculator ds;
 	private String id;
+	private String value;
+	
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
 	public static void setDistanceCalculator(DistanceCalculator ds){
 		Point.ds=ds;
 	}
@@ -18,7 +26,15 @@ public class Point {
 		this.dimension=vector.length;
 	}
 	public Point(double[] vector,String id){
-		this.vector = vector;
+		double sum=0;
+		for(double i:vector){
+			sum+=i;
+		}
+		this.vector = new double[vector.length];
+		for(int i=0;i<vector.length;i++){
+			this.vector[i]=vector[i]/sum;
+		}
+		
 		this.id=id;
 		for(double v : vector){
 			vecLen+=v*v;

@@ -8,6 +8,7 @@ import java.util.Set;
 /**
  * @author zhouxc
  * 2014-04-15 11:49:30 create
+ * 
  * **/
 public class TfIdfGenerator {
 	private int allDocCount=0;

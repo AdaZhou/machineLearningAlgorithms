@@ -34,6 +34,12 @@ public class KMeans {
 	private double precision;
 	private int maxIteration;
 	private Map<Point,List<Point>> centerToMember=new HashMap<Point,List<Point>>();
+	/**
+	 * @param k 分类数目
+	 * @param moveDistance 各个类别中心点移动距离小于该参数时认为收敛
+	 * @param maxIteration 最大迭代次数
+	 * 聚类完成的条件是 满足中心点移动距离<moveDistance 或者 迭代次数=maxIteration
+	 * **/
 	public KMeans(Point[] p,int k,double moveDistance,int maxIteration){
 		this.p=p;
 		this.k=k;
