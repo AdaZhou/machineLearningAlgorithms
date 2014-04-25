@@ -14,10 +14,10 @@ public class EuclideanDistanceCalculator implements DistanceCalculator{
 	 * @see ada.ml.common.DistanceCalculator#getDistance(ada.ml.common.Point, ada.ml.common.Point)
 	 */
 	@Override
-	public double getDistance(Point p1, Point p2) {
+	public double getDistance(Object p1, Object p2) {
 		// TODO Auto-generated method stub
-		double[] v1=p1.getVector();
-		double[] v2=p2.getVector();
+		double[] v1=((Point)p1).getVector();
+		double[] v2=((Point)p2).getVector();
 		double distance=0;
 		for(int i=0;i<v1.length;i++){
 			distance+=(v1[i]-v2[i])*(v1[i]-v2[i]);

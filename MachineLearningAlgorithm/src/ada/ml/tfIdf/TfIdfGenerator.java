@@ -15,11 +15,19 @@ public class TfIdfGenerator {
 	private Map<String,Map<String,Double>> termToDocIdToTf=new HashMap<String,Map<String,Double>>();
 	private Set<String> termSet=new HashSet<String>();
 	private Map<String,Integer> termToIndex=new HashMap<String,Integer>();
+	private Map<String,Set<String>> docIdToTermSet=new HashMap<String,Set<String>>();
 	public void addDoc(String docId,Map<String,Integer> tfMap,double wordNumber){
+
 		Set<Entry<String,Integer>> ens=tfMap.entrySet();
 		for(Entry<String,Integer> en:ens){
 			allDocCount++;
 			String term=en.getKey();
+			Set<String> s= docIdToTermSet.get(docId);
+			if(s==null){
+				s=new HashSet<String>();
+				docIdToTermSet.put(docId, s);
+			}
+			s.add(term);
 			Map<String,Double> docIds=termToDocIdToTf.get(term);
 			if(docIds==null){
 				docIds=new HashMap<String,Double>();
@@ -38,8 +46,10 @@ public class TfIdfGenerator {
 		}
 		
 	}
-	public double[] getTfIdf(String docId,Set<String> termSet){
+	public double[] getTfIdf(String docId){
+		Set<String> termSet=docIdToTermSet.get(docId);
 		double[] tfidf=new double[termToDocIdToTf.size()];
+		
 		for(String term:termSet){
 			int index=termToIndex.get(term);
 			double docHasTerm=termToDocIdToTf.get(term).size();

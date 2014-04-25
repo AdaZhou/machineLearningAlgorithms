@@ -15,12 +15,11 @@ import java.util.Set;
  */
 public class TfIdfManager {
 	private Map<String,TfIdfGenerator> map=new HashMap<String,TfIdfGenerator>();
-	public void registerField(String field){
+
+	public void addDoc(String field, String docId,Map<String,Integer> tfMap,double wordNumber){
 		if(!map.containsKey(field)){
 			map.put(field, new TfIdfGenerator());
 		}
-	}
-	public void addDoc(String field, String docId,Map<String,Integer> tfMap,double wordNumber){
 		map.get(field).addDoc(docId, tfMap, wordNumber);
 	}
 	public void finishAddDoc(){
@@ -29,7 +28,7 @@ public class TfIdfManager {
 			map.get(k).finishAddDoc();
 		}
 	}
-	public double[] getTfIdf(String fieldId,String docId,Set<String> termSet){
-		return map.get(fieldId).getTfIdf(docId, termSet);
+	public double[] getTfIdf(String fieldId,String docId){
+		return map.get(fieldId).getTfIdf(docId);
 	}
 }

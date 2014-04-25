@@ -5,5 +5,5 @@ package ada.ml.common;
  * 注意这里起名字是距离，也就是说数值越大，距离越大
  * **/
 public interface DistanceCalculator {
-	public double getDistance(Point p1, Point p2);
+	public double getDistance(Object p1, Object p2);
 }

@@ -5,9 +5,8 @@ public class Point {
 	private double[] vector=null;
 	private double vecLen=0d;
 	private static DistanceCalculator ds;
-	private String id;
-	private String value;
-	
+	protected String id;
+	protected String value;
 	public String getValue() {
 		return value;
 	}
@@ -16,6 +15,9 @@ public class Point {
 	}
 	public static void setDistanceCalculator(DistanceCalculator ds){
 		Point.ds=ds;
+	}
+	public Point(){
+
 	}
 	public Point(double[] vector){
 		this.vector = vector;

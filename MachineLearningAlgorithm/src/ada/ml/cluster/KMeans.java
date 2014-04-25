@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ada.ml.common.DistanceCalculator;
 import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
@@ -34,6 +35,7 @@ public class KMeans {
 	private double precision;
 	private int maxIteration;
 	private Map<Point,List<Point>> centerToMember=new HashMap<Point,List<Point>>();
+	
 	/**
 	 * @param k 分类数目
 	 * @param moveDistance 各个类别中心点移动距离小于该参数时认为收敛
@@ -136,7 +138,8 @@ public class KMeans {
 		int k=10;
 		double d=10E-2;
 		int maxIteration=1000000;
-		Point.setDistanceCalculator(new EuclideanDistanceCalculator());
+		DistanceCalculator cal=new EuclideanDistanceCalculator();
+		Point.setDistanceCalculator(cal);
 		Point[] pa=new Point[num];
 /*		pa[0]=new Point(0,new double[]{0,1});
 		pa[1]=new Point(0,new double[]{1,0});

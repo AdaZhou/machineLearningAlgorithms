@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import ada.ml.common.DistanceCalculator;
 import ada.ml.common.EuclideanDistanceCalculator;
 import ada.ml.common.Point;
 
@@ -107,8 +107,9 @@ public class Agnes {
 			mergeCluster(clusterFirst,clusterSecond);
 			this.currentClusterNum--;
 			double dis=p[pa.getFirst()].calculateDistance(p[pa.getSecond()]);
-			//System.out.println(dis);
+			System.out.println(dis);
 			if(this.currentClusterNum==this.finalClusterNum||dis>this.diffLine){
+				
 				break;
 			}
 		}
@@ -145,7 +146,8 @@ public class Agnes {
 	public static void main(String[] args){
 		int num=50;
 		int k=10;
-		Point.setDistanceCalculator(new EuclideanDistanceCalculator());
+		DistanceCalculator cal=new EuclideanDistanceCalculator();
+		Point.setDistanceCalculator(cal);
 		Point[] pa=new Point[num];
 /*		pa[0]=new Point(0,new double[]{0,1});
 		pa[1]=new Point(0,new double[]{1,0});

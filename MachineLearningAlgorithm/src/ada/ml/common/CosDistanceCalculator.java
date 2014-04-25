@@ -9,12 +9,12 @@ package ada.ml.common;
  *
  */
 public class CosDistanceCalculator implements DistanceCalculator{
-	public double getDistance(Point p1, Point p2){
-		double[] v=p1.getVector();
+	public double getDistance(Object p1, Object p2){
+		double[] v=((Point)p1).getVector();
 		double innerProduct=0d;
 		for(int i=0;i<v.length;i++){
-			innerProduct+=v[i]*p2.getVector()[i];
+			innerProduct+=v[i]*((Point)p2).getVector()[i];
 		}
-		return (1d-innerProduct/(p1.getVecLen()*p2.getVecLen()));
+		return (1d-innerProduct/((Point) p1).getVecLen()*((Point)p2).getVecLen());
 	}
 }
