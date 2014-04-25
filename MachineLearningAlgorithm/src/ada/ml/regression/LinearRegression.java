@@ -2,7 +2,7 @@
  * @author zhouxiaocao
  * 2014-4-24 上午11:28:10 create
  */
-package ada.dataStructure.regression;
+package ada.ml.regression;
 
 
 

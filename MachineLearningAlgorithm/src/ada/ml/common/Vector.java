@@ -15,6 +15,12 @@ public class Vector {
 	public Vector(double[] vec){
 		this.vec=vec;
 	}
+	public double[] getVecValue(){
+		return vec;
+	}
+	public int getDimension(){
+		return vec.length;
+	}
 	public double getValueAtIndex(int index){
 		return vec[index]; 
 	}
@@ -27,6 +33,10 @@ public class Vector {
 			sum+=this.vec[i]*v.vec[i];
 		}
 		return sum;
+	}
+	public Matrix product(Matrix m){
+		Matrix ret=new Matrix(new Vector[]{this});
+		return ret.product(m);
 	}
 	public static Vector generateRandomVec(int highLimit,int dimension){
 		Vector v=new Vector(new double[dimension]);
