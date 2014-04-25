@@ -15,12 +15,12 @@ import ada.ml.common.Vector;
 public class LinearRegression {
 	public static void main(String[] args){
 		System.out.println("=======BGD批量梯度下降=====");
-		int xDimension=2;
+		int xDimension=3;
 		LinearRegression lr=new LinearRegression();
 		Vector[] xs=new Vector[60];
 		Vector[] ys=new Vector[60];
 		lr.generateSample(xs, ys);
-		Vector theta=new Vector(new double[]{9,0,7});
+		Vector theta=new Vector(new double[]{23,1,21});
 		for(int i=0;i<xDimension;i++){
 			//注意这里的 alpha一定要取的合适，太大的话得不到收敛结果
 			lr.batchGD(ys,theta,xs,i,2E-7);
@@ -43,7 +43,7 @@ public class LinearRegression {
 	public void model(Vector[] xs,Vector[] ys,Vector theta,int start,int end){
 		int index=start;
 		for(int i=start;i<end;i++){
-			double[] x=new double[]{i,i+i*2};
+			double[] x=new double[]{i,i+i*2,1};
 			Vector xv=new Vector(x);
 			double y=theta.product(xv);
 			xs[index]=xv;
@@ -56,7 +56,7 @@ public class LinearRegression {
 	 * theta[j]=theta[j]-alpha*SUM((y(i)-theta*x(i))*x(i)[j])
 	 * **/
 	public void batchGD(Vector[] y,Vector theta,Vector[] x,int thetaupdatedIndex,double alpha){
-		double convergeThreshold=10E-2;
+		double convergeThreshold=10E-7;
 		double deltaTheta=100;
 		int iteration=0;
 		while(Math.abs(deltaTheta)>convergeThreshold){
