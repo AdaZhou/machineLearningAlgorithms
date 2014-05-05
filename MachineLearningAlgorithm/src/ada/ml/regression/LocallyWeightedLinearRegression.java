@@ -8,10 +8,17 @@ import ada.ml.common.Vector;
 
 /**
  * @author zhouxc
- *
+ *非参数算法
  */
 public class LocallyWeightedLinearRegression {
-	public void predict(Vector x){
+	/**
+	 * for i: 0->m
+	 * 		for j: 0->theta.getdimension
+	 * 			theta[j]=theta[j]+alpha*SUM(W(i)*(y(i)-theta*x(i))*x(i)[j])
+	 * 
+	 * **/
+	public void predict(Vector x,double bandW){
 		
 	}
+	
 }

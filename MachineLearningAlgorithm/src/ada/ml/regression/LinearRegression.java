@@ -10,7 +10,7 @@ import ada.ml.common.Vector;
 
 /**
  * @author zhouxc
- *
+ *需要继续改进步长alpha的设置办法
  */
 public class LinearRegression {
 	public static void main(String[] args){

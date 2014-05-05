@@ -18,9 +18,9 @@ public class SampleGenerator {
 	 * y是1维
 	 * theta是3维
 	 * **/
-	public static void generateLinearSample(Vector[] xs,Vector[] ys){
-		xs=new Vector[60];
-		ys=new Vector[60];
+	public static void generateLinearSample(Vector[] xs,Vector[] ys,int dataNumber){
+		xs=new Vector[dataNumber];
+		ys=new Vector[dataNumber];
 		generateLinearSample(xs,ys,new Vector(new double[]{3,4,7}),0,20);
 		generateLinearSample(xs,ys,new Vector(new double[]{5,4,1}),20,40);
 		generateLinearSample(xs,ys,new Vector(new double[]{6,2,8}),40,60);
